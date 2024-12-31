@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Style - 時尚服飾購物網站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .banner {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        nav {
+            background: #f4f4f4;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .category-title {
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #333;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h3 {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            height: 2.4em;
+            overflow: hidden;
+        }
+
+        .product-card .price {
+            color: #e44d26;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .product-card button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .product-card button:hover {
+            background: #555;
+        }
+
+        /* 購物車圖標樣式 */
+        .cart-icon {
+            position: fixed;
+            right: 1rem;
+            top: 80px;
+            background: white;
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-icon .count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e44d26;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 購物車面板樣式 */
+        .cart {
+            position: fixed;
+            right: -300px;
+            top: 80px;
+            width: 300px;
+            background: white;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 999;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart.active {
+            right: 1rem;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-close {
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-close:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        #cart-total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #333;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .about-section {
+            background: #f9f9f9;
+            padding: 3rem 0;
+            margin-top: 2rem;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-align: center;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Infinite Style</h1>
+        <p>展現您的無限風格</p>
+    </header>
+
+    <div class="banner">
+        <img src="00.jpg" alt="Infinite Style 時尚橫幅">
+    </div>
+
+    <nav>
+        <a href="#men">男裝</a>
+        <a href="#women">女裝</a>
+        <a href="#about">關於我們</a>
+    </nav>
+
+    <!-- 購物車圖標 -->
+    <div class="cart-icon" onclick="toggleCart()">
+        🛒
+        <div class="count">0</div>
+    </div>
+
+    <!-- 購物車面板 -->
+    <div class="cart">
+        <div class="cart-header">
+            <h3>購物車</h3>
+            <span class="cart-close" onclick="toggleCart()">✕</span>
+        </div>
+        <div id="cart-items"></div>
+        <div id="cart-total">總計: NT$0</div>
+    </div>
+
+    <div class="container">
+        <h2 id="men" class="category-title">男裝</h2>
+        <div class="products" id="men-products"></div>
+        
+        <h2 id="women" class="category-title">女裝</h2>
+        <div class="products" id="women-products"></div>
+    </div>
+
+    <section id="about" class="about-section">
+        <div class="about-content">
+            <h2 class="category-title">關於我們</h2>
+            <p>Infinite Style 致力於為您提供最優質的時尚服飾。我們相信，每個人都應該擁有屬於自己的獨特風格。</p>
+            <p>我們的使命是為客戶提供優質、時尚、舒適的服裝選擇，讓每個人都能找到屬於自己的完美搭配。</p>
+            <p>地址: 臺北市11114陽明山華岡路55號</p>
+            <p>電話: 8548987151</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>Infinite Style</p>
+        <p>地址: 臺北市11114陽明山華岡路55號</p>
+        <p>電話: 8548987151</p>
+    </footer>
+
+    <script>
+        // 商品數據
+        const products = {
+            men: [
+                { id: 1, name: '針織休閒長袖t卹', price: 250, image: '01.jpg' },
+                { id: 2, name: '字母刺繡休閒百搭連帽長袖衛衣', price: 295, image: '02.jpg' },
+                { id: 3, name: '寬鬆版型男士針織休閒羊毛抽繩連帽夾克', price: 450, image: '03.jpg' },
+                { id: 4, name: '男士時尚寬鬆復古做舊洗水闊腳百搭牛仔褲', price: 588, image: '04.jpg' },
+                { id: 5, name: '寬鬆男士束腰側口袋運動褲', price: 393, image: '05.jpg' },
+                { id: 6, name: '男士休閒隨機刺繡熊捲邊運動褲', price: 465, image: '06.jpg' }
+            ],
+            women: [
+                { id: 7, name: '女士純色寬圓領修身t卹', price: 124, image: '07.jpg' },
+                { id: 8, name: '女士修身立領長袖羊毛t卹', price: 178, image: '08.jpg' },
+                { id: 9, name: '女士純色不對稱領長袖t卹', price: 200, image: '09.jpg' },
+                { id: 10, name: '女士純色寬鬆牛仔褲', price: 572, image: '10.jpg' },
+                { id: 11, name: '女士休閒抽繩腰寬鬆闊腿褲', price: 301, image: '11.jpg' },
+                { id: 12, name: '女式寬鬆直筒牛仔褲', price: 562, image: '12.jpg' }
+            ]
+        };
+
+        // 購物車數據
+        let cart = [];
+        let isCartVisible = false;
+
+        // 切換購物車顯示/隱藏
+        function toggleCart() {
+            const cart = document.querySelector('.cart');
+            isCartVisible = !isCartVisible;
+            cart.classList.toggle('active');
+        }
+
+        // 更新購物車圖標的數量
+        function updateCartIcon() {
+            const countElement = document.querySelector('.cart-icon .count');
+            countElement.textContent = cart.length;
+        }
+
+        // 渲染商品
+        function renderProducts() {
+            const menContainer = document.getElementById('men-products');
+            const womenContainer = document.getElementById('women-products');
+
+            menContainer.innerHTML = products.men.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">NT$${product.price}</p>
+                    <button onclick="addToCart(${product.id})">加入購物車</button>
+                </div>
+            `).join('');
+
+            womenContainer.innerHTML = products.women.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">NT$${product.price}</p>
+                    <button onclick="addToCart(${product.id})">加入購物車</button>
+                </div>
+            `).join('');
+        }
+
+        // 加入購物車
+        function addToCart(productId) {
+            const product = [...products.men, ...products.women].find(p => p.id === productId);
+            cart.push(product);
+            renderCart();
+            updateCartIcon();
+        }
+
+        // 渲染購物車
+        function renderCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <span>${item.name}</span>
+                    <span>NT$${item.price}</span>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.textContent = `總計: NT$${total}`;
+            
+            updateCartIcon();
+        }
+
+        // 點擊外部關閉購物車
+        document.addEventListener('click', function(event) {
+            const cart = document.querySelector('.cart');
+            const cartIcon = document.querySelector('.cart-icon');
+            
+            if (isCartVisible && 
+                !cart.contains(event.target) && 
+                !cartIcon.contains(event.target)) {
+                toggleCart();
+            }
+        });
+
+        // 平滑滾動功能
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const elementId = this.getAttribute('href');
+                const element = document.querySelector(elementId);
+                const navHeight = document.querySelector('nav').offsetHeight;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 初始化
+        renderProducts();
+        updateCartIcon();
+    </script>
+</body>
+</html>
